@@ -1,0 +1,53 @@
+# Use postgres/example user/password credentials
+version: '3.9'
+
+services:
+
+  europe-db:
+    image: postgres:16.2-alpine
+#    restart: always
+    ports:
+      - "15432:5432"
+    # set shared memory limit when using docker-compose
+    shm_size: 128mb
+    # or set shared memory limit when deploy via swarm stack
+    #volumes:
+    #  - type: tmpfs
+    #    target: /dev/shm
+    #    tmpfs:
+    #      size: 134217728 # 128*2^20 bytes = 128Mb
+    environment:
+      POSTGRES_PASSWORD: europe
+      POSTGRES_HOST_AUTH_METHOD: trust
+#      POSTGRES_USER: user-europe
+#      POSTGRES_DB: europe
+    volumes:
+      - ./europe/init:/docker-entrypoint-initdb.d
+
+  america-db:
+    image: postgres:16.2-alpine
+#    restart: always
+    ports:
+      - "25432:5432"
+    # set shared memory limit when using docker-compose
+    shm_size: 128mb
+    # or set shared memory limit when deploy via swarm stack
+    #volumes:
+    #  - type: tmpfs
+    #    target: /dev/shm
+    #    tmpfs:
+    #      size: 134217728 # 128*2^20 bytes = 128Mb
+    environment:
+      POSTGRES_PASSWORD: america
+      POSTGRES_HOST_AUTH_METHOD: trust
+#      POSTGRES_USER: user-america
+#      POSTGRES_DB: america
+    volumes:
+      - ./america/init:/docker-entrypoint-initdb.d
+
+
+  adminer:
+    image: adminer
+#    restart: always
+    ports:
+      - 8080:8080
