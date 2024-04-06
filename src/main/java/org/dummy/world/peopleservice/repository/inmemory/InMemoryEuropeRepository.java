@@ -1,6 +1,7 @@
-package org.dummy.world.peopleservice.repository;
+package org.dummy.world.peopleservice.repository.inmemory;
 
 import org.dummy.world.peopleservice.model.City;
+import org.dummy.world.peopleservice.repository.EuropeRepository;
 
 import java.util.List;
 

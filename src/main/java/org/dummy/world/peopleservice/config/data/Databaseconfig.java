@@ -8,6 +8,8 @@ import org.springframework.context.annotation.Import;
 
 @Configuration
 @ConditionalOnProperty(value = "peopleservice.data.source", havingValue = "DATABASE")
-@Import({EuropeDataSourceConfiguration.class, AmericaDataSourceConfiguration.class})
+@Import({
+        EuropeDataSourceConfiguration.class,
+        AmericaDataSourceConfiguration.class})
 public class Databaseconfig {
 }

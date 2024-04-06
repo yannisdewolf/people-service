@@ -4,17 +4,20 @@ peopleservice:
     source: DATABASE
 
 # only used when peopleservice.data.source = DATABASE
+
 spring:
   application:
     name: peopleservice
   datasource:
     europe:
-      url:
-      username:
-      password:
-      driver-class-name:
+      url: jdbc:postgresql://localhost:15432/europe
+      username: europe
+      password: europe
+      driver-class-name: org.postgresql.Driver
     america:
-      url:
-      username:
-      password:
-      driver-class-name:
+      url: jdbc:postgresql://localhost:25432/america
+      username: america
+      password: america
+      driver-class-name: org.postgresql.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
