@@ -1,0 +1,20 @@
+peopleservice:
+  data:
+    # INMEMORY or DATABASE
+    source: DATABASE
+
+# only used when peopleservice.data.source = DATABASE
+spring:
+  application:
+    name: peopleservice
+  datasource:
+    europe:
+      url:
+      username:
+      password:
+      driver-class-name:
+    america:
+      url:
+      username:
+      password:
+      driver-class-name:
