@@ -17,8 +17,8 @@ services:
     #    tmpfs:
     #      size: 134217728 # 128*2^20 bytes = 128Mb
     environment:
-      POSTGRES_PASSWORD: europe
-      POSTGRES_HOST_AUTH_METHOD: trust
+      - POSTGRES_USER=europe
+      - POSTGRES_PASSWORD=europe
 #      POSTGRES_USER: user-europe
 #      POSTGRES_DB: europe
     volumes:
@@ -38,8 +38,8 @@ services:
     #    tmpfs:
     #      size: 134217728 # 128*2^20 bytes = 128Mb
     environment:
-      POSTGRES_PASSWORD: america
-      POSTGRES_HOST_AUTH_METHOD: trust
+      - POSTGRES_USER=america
+      - POSTGRES_PASSWORD=america
 #      POSTGRES_USER: user-america
 #      POSTGRES_DB: america
     volumes:
