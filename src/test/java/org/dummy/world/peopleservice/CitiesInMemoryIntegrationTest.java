@@ -1,14 +1,15 @@
 package org.dummy.world.peopleservice;
 
-import org.assertj.core.api.Fail;
 import org.junit.jupiter.api.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class CitiesIntegrationTest {
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
+        , properties = "peopleservice.data.source=INMEMORY"
+)
+public class CitiesInMemoryIntegrationTest {
 
     @Autowired
     private TestRestTemplate restTemplate;
