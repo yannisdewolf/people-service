@@ -15,6 +15,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.sql.DataSource;
+import java.util.Map;
 import java.util.Objects;
 
 @EnableTransactionManagement
@@ -26,7 +27,7 @@ import java.util.Objects;
 public class EuropeDataSourceConfiguration {
 
     @Bean
-    @ConfigurationProperties("spring.datasource.europe")
+    @ConfigurationProperties("peopleservice.datasource.europe")
     public DataSourceProperties europeDataSourceProperties() {
         return new DataSourceProperties();
     }
@@ -51,6 +52,7 @@ public class EuropeDataSourceConfiguration {
             EntityManagerFactoryBuilder builder) {
         return builder
                 .dataSource(dataSource)
+                .properties(Map.of("hibernate.default_schema", "europe"))
                 .packages(City.class)
                 .build();
     }

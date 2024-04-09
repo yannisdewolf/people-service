@@ -25,7 +25,7 @@ import java.util.Objects;
 public class AmericaDataSourceConfiguration {
 
     @Bean
-    @ConfigurationProperties("spring.datasource.america")
+    @ConfigurationProperties("peopleservice.datasource.america")
     public DataSourceProperties americaDataSourceProperties() {
         return new DataSourceProperties();
     }

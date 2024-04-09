@@ -2,12 +2,6 @@ peopleservice:
   data:
     # INMEMORY or DATABASE
     source: DATABASE
-
-# only used when peopleservice.data.source = DATABASE
-
-spring:
-  application:
-    name: peopleservice
   datasource:
     europe:
       url: jdbc:postgresql://localhost:15432/europe
@@ -19,6 +13,12 @@ spring:
       username: america
       password: america
       driver-class-name: org.postgresql.Driver
+
+# only used when peopleservice.data.source = DATABASE
+
+spring:
+  application:
+    name: peopleservice
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     open-in-view: false

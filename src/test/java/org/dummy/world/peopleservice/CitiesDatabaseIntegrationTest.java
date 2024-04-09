@@ -23,12 +23,22 @@ public class CitiesDatabaseIntegrationTest {
 
     @Container
     public static PostgreSQLContainer<?> europeContainer = new PostgreSQLContainer<>("postgres:16.2-alpine")
-            .withDatabaseName("europe")
-            .withUsername("sa")
-            .withPassword("sa")
+//            .withDatabaseName("europe")
+//            .withUsername("sa")
+//            .withPassword("sa")
+            .withCopyFileToContainer(MountableFile.forClasspathResource("create_schema_europe.sql"),
+                    "/docker-entrypoint-initdb.d/00_init-schema.sql")
             .withCopyFileToContainer(
                     MountableFile.forClasspathResource(
-                            "europe.sql"), "/docker-entrypoint-initdb.d/"
+                            "create_city_europe.sql"), "/docker-entrypoint-initdb.d/01_create_table.sql"
+            )
+//            .withCopyFileToContainer(
+//                    MountableFile.forClasspathResource(
+//                            "create_city.sql"), "/docker-entrypoint-initdb.d/01_create_table.sql"
+//            )
+            .withCopyFileToContainer(
+                    MountableFile.forClasspathResource(
+                            "europe.sql"), "/docker-entrypoint-initdb.d/02_europe.sql"
             );
             ;
 
@@ -39,19 +49,29 @@ public class CitiesDatabaseIntegrationTest {
             .withPassword("sa")
             .withCopyFileToContainer(
                     MountableFile.forClasspathResource(
-                            "america.sql"), "/docker-entrypoint-initdb.d/"
+                            "create_city.sql"), "/docker-entrypoint-initdb.d/01_create_table.sql"
+            )
+            .withCopyFileToContainer(
+                    MountableFile.forClasspathResource(
+                            "america.sql"), "/docker-entrypoint-initdb.d/02_america.sql"
             );
 
     static class Initializer
             implements ApplicationContextInitializer<ConfigurableApplicationContext> {
         public void initialize(ConfigurableApplicationContext configurableApplicationContext) {
+//            String password = europeContainer.getPassword();
+            String password = "pw1";
+//            String username = europeContainer.getUsername();
+            String username = "europe_user";
+            System.out.println(username);
+            System.out.println(password);
             TestPropertyValues.of(
-                    "spring.datasource.europe.url=" + europeContainer.getJdbcUrl(),
-                    "spring.datasource.europe.username=" + europeContainer.getUsername(),
-                    "spring.datasource.europe.password=" + europeContainer.getPassword(),
-                    "spring.datasource.america.url=" + americaContainer.getJdbcUrl(),
-                    "spring.datasource.america.username=" + americaContainer.getUsername(),
-                    "spring.datasource.america.password=" + americaContainer.getPassword()
+                    "peopleservice.datasource.europe.url=" + europeContainer.getJdbcUrl(),
+                    "peopleservice.datasource.europe.username=" + username,
+                    "peopleservice.datasource.europe.password=" + password,
+                    "peopleservice.datasource.america.url=" + americaContainer.getJdbcUrl(),
+                    "peopleservice.datasource.america.username=" + americaContainer.getUsername(),
+                    "peopleservice.datasource.america.password=" + americaContainer.getPassword()
             ).applyTo(configurableApplicationContext.getEnvironment());
         }
     }
