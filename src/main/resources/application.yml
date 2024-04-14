@@ -2,6 +2,7 @@ peopleservice:
   data:
     # INMEMORY or DATABASE
     source: DATABASE
+# only used when peopleservice.data.source = DATABASE
   datasource:
     europe:
       url: jdbc:postgresql://localhost:15432/europe
@@ -14,7 +15,6 @@ peopleservice:
       password: america
       driver-class-name: org.postgresql.Driver
 
-# only used when peopleservice.data.source = DATABASE
 
 spring:
   application:
@@ -22,3 +22,5 @@ spring:
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     open-in-view: false
+server:
+  port: 8081
