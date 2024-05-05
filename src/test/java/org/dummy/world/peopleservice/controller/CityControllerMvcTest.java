@@ -1,5 +1,6 @@
 package org.dummy.world.peopleservice.controller;
 
+import org.dummy.world.peopleservice.config.security.SecurityConfig;
 import org.dummy.world.peopleservice.model.City;
 import org.dummy.world.peopleservice.service.AmericaService;
 import org.dummy.world.peopleservice.service.EuropeService;
@@ -7,7 +8,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
@@ -19,6 +22,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(CityController.class)
+@Import(SecurityConfig.class)
 class CityControllerMvcTest {
 
     @Autowired
@@ -31,6 +35,21 @@ class CityControllerMvcTest {
     private AmericaService americaService;
 
     @Test
+    void noUserReturnsUnautherized() throws Exception {
+        // Given
+
+        // When
+        mockMvc
+                .perform(MockMvcRequestBuilders.get("/cities"))
+                .andDo(print())
+                .andExpect(status().isUnauthorized());
+
+        // Then
+
+    }
+
+    @Test
+    @WithMockUser(roles = "READ")
     void returnsCities() throws Exception {
         // Given
         when(americaService.findAll()).thenReturn(List.of(
@@ -45,8 +64,10 @@ class CityControllerMvcTest {
         ));
 
         // When
-        mockMvc.perform(MockMvcRequestBuilders.get("/cities"))
+        mockMvc
+                .perform(MockMvcRequestBuilders.get("/cities"))
                 .andDo(print())
+                .andExpect(status().isOk())
                 .andExpect(content().json("""
                                                 [
                                                 {"name":"Brussels","amount":1209000},
@@ -56,8 +77,37 @@ class CityControllerMvcTest {
                                                 {"name":"Washington","amount":671000}]
                         """
                 ))
-                .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON));
+
+        // Then
+
+    }
+
+    @Test
+    @WithMockUser(username = "franky")
+    void unkownUserReturns403() throws Exception {
+        // Given
+
+        // When
+        mockMvc
+                .perform(MockMvcRequestBuilders.get("/cities"))
+                .andDo(print())
+                .andExpect(status().isForbidden());
+
+        // Then
+
+    }
+
+    @Test
+    @WithMockUser(roles = {})
+    void noRoleReturns403() throws Exception {
+        // Given
+
+        // When
+        mockMvc
+                .perform(MockMvcRequestBuilders.get("/cities"))
+                .andDo(print())
+                .andExpect(status().isForbidden());
 
         // Then
 

@@ -2,12 +2,11 @@ package org.dummy.world.peopleservice;
 
 import org.junit.jupiter.api.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.util.TestPropertyValues;
-import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ContextConfiguration;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
@@ -18,24 +17,17 @@ import org.testcontainers.utility.MountableFile;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
         , properties = "peopleservice.data.source=DATABASE"
 )
-@ContextConfiguration(initializers = CitiesDatabaseIntegrationTest.Initializer.class)
-public class CitiesDatabaseIntegrationTest {
+@ContextConfiguration(initializers = CitiesDatabaseIntegrationTest.Initializer.class, classes = IntegrationTestConfiguration.class)
+public class CitiesDatabaseIntegrationTest extends AbstractIntegrationTest {
 
     @Container
     public static PostgreSQLContainer<?> europeContainer = new PostgreSQLContainer<>("postgres:16.2-alpine")
-//            .withDatabaseName("europe")
-//            .withUsername("sa")
-//            .withPassword("sa")
             .withCopyFileToContainer(MountableFile.forClasspathResource("create_schema_europe.sql"),
                     "/docker-entrypoint-initdb.d/00_init-schema.sql")
             .withCopyFileToContainer(
                     MountableFile.forClasspathResource(
                             "create_city_europe.sql"), "/docker-entrypoint-initdb.d/01_create_table.sql"
             )
-//            .withCopyFileToContainer(
-//                    MountableFile.forClasspathResource(
-//                            "create_city.sql"), "/docker-entrypoint-initdb.d/01_create_table.sql"
-//            )
             .withCopyFileToContainer(
                     MountableFile.forClasspathResource(
                             "europe.sql"), "/docker-entrypoint-initdb.d/02_europe.sql"
@@ -59,9 +51,7 @@ public class CitiesDatabaseIntegrationTest {
     static class Initializer
             implements ApplicationContextInitializer<ConfigurableApplicationContext> {
         public void initialize(ConfigurableApplicationContext configurableApplicationContext) {
-//            String password = europeContainer.getPassword();
             String password = "pw1";
-//            String username = europeContainer.getUsername();
             String username = "europe_user";
             System.out.println(username);
             System.out.println(password);
@@ -76,17 +66,13 @@ public class CitiesDatabaseIntegrationTest {
         }
     }
 
-    @Autowired
-    private TestRestTemplate restTemplate;
-
     @Test
     void getCities() throws Exception {
         // Given
 
         // When
-        String actual = restTemplate.getForObject("/cities", String.class);
+        ResponseEntity<String> response = doGet("/cities");
 
-        System.out.println(actual);
         // Then
         JSONAssert.assertEquals("""
                                                 [
@@ -96,7 +82,7 @@ public class CitiesDatabaseIntegrationTest {
                                                 {"name":"New York","amount":8260000},
                                                 {"name":"Washington","amount":671000}]
                         """
-                , actual, false);
+                , response.getBody(), false);
     }
 
 }
