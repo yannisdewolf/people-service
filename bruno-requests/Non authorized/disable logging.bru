@@ -1,0 +1,17 @@
+meta {
+  name: disable logging
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{people-service}}/actuator/togglz/LOGGING
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "enabled": false
+  }
+}

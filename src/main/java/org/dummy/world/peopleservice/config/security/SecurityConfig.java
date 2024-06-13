@@ -2,8 +2,10 @@ package org.dummy.world.peopleservice.config.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -17,11 +19,14 @@ public class SecurityConfig {
 
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http.authorizeHttpRequests(c -> c
+                        .requestMatchers("/actuator/**").permitAll()
+                        .requestMatchers("/actuator/togglz/**").permitAll()
+                        .requestMatchers("/togglz-console/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/cities").hasRole("READ")
+        );
+        http.csrf(AbstractHttpConfigurer::disable);
         http.httpBasic(Customizer.withDefaults());
-
-        http.authorizeHttpRequests(c -> c.anyRequest()
-                        .hasRole("READ")
-                );
 
         return http.build();
     }

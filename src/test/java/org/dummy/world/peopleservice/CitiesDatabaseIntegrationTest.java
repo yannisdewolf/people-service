@@ -17,7 +17,9 @@ import org.testcontainers.utility.MountableFile;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
         , properties = "peopleservice.data.source=DATABASE"
 )
-@ContextConfiguration(initializers = CitiesDatabaseIntegrationTest.Initializer.class, classes = IntegrationTestConfiguration.class)
+@ContextConfiguration(initializers =
+        CitiesDatabaseIntegrationTest.Initializer.class,
+        classes = IntegrationTestConfiguration.class)
 public class CitiesDatabaseIntegrationTest extends AbstractIntegrationTest {
 
     @Container

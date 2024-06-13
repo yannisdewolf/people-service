@@ -13,6 +13,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.togglz.core.manager.FeatureManager;
 
 import java.util.List;
 
@@ -33,6 +34,10 @@ class CityControllerMvcTest {
 
     @MockBean
     private AmericaService americaService;
+
+    @MockBean
+    private FeatureManager featureManager;
+
 
     @Test
     void noUserReturnsUnautherized() throws Exception {

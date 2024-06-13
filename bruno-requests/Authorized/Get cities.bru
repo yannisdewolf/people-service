@@ -1,0 +1,16 @@
+meta {
+  name: Get cities
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{people-service}}/cities
+  body: none
+  auth: basic
+}
+
+auth:basic {
+  username: pepe
+  password: ronny
+}

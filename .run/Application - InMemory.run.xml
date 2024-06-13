@@ -1,0 +1,10 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Application - InMemory" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+    <module name="peopleservice.main" />
+    <option name="PROGRAM_PARAMETERS" value="--peopleservice.data.source=INMEMORY" />
+    <option name="SPRING_BOOT_MAIN_CLASS" value="org.dummy.world.peopleservice.PeopleserviceApplication" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

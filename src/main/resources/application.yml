@@ -2,12 +2,12 @@ peopleservice:
   data:
     # INMEMORY or DATABASE
     source: DATABASE
-# only used when peopleservice.data.source = DATABASE
+# peopleservice.datasource... properties are only used when peopleservice.data.source = DATABASE
   datasource:
     europe:
       url: jdbc:postgresql://localhost:15432/europe
-      username: europe
-      password: europe
+      username: europe_user
+      password: pw1
       driver-class-name: org.postgresql.Driver
     america:
       url: jdbc:postgresql://localhost:25432/america
@@ -24,3 +24,22 @@ spring:
     open-in-view: false
 server:
   port: 8081
+
+togglz:
+  console:
+    enabled: true
+    secured: false
+  feature-enums: org.dummy.world.peopleservice.config.features.PeopleFeatures
+logging:
+  level:
+    org.togglz: debug
+    org.springframework.security: trace
+management:
+  endpoints:
+    web:
+      exposure:
+        include:
+          - health
+          - metrics
+          - mappings
+          - togglz

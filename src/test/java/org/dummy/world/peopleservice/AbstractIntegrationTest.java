@@ -29,6 +29,7 @@ public abstract class AbstractIntegrationTest {
 
     protected ResponseEntity<String> doGet(String url) {
         return testRestTemplate
+                .withBasicAuth("pepe", "ronny")
                 .exchange(url, HttpMethod.GET, null, String.class);
     }
 
